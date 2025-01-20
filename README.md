@@ -1,8 +1,9 @@
 # CAN Scripts
 
-This repository contains two main scripts for manipulating and visualizing CAN data:
+This repository contains two scripts for manipulating and visualizing CAN data:
 
 1. `can_chart.py`
+2. `timestamp_conversor.py`
 
 ## can_chart.py
 
@@ -40,3 +41,16 @@ To install the dependencies, run:
 ```sh
 pip install matplotlib numpy
 ```
+
+## timestamp_conversor.py
+
+This script converts timestamps in CAN data files to a human-readable format in GMT.
+
+### Usage
+
+1. Place the `.txt` data files in the `data` directory or in subdirectories within it.
+2. Run the script:
+    ```sh
+    python timestamp_conversor.py
+    ```
+3. It will create a new file with `converted` added to its name.
