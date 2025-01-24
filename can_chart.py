@@ -6,6 +6,12 @@ import matplotlib.dates as mdates
 from matplotlib.dates import MinuteLocator
 import numpy as np
 
+# Configurations
+start_time = ""
+end_time = ""
+show_graphs = {'speed': True, 'rpm': True, 'collision': True}
+interval = 5
+
 # Input directory
 input_directory = os.path.join(os.path.dirname(__file__), 'data')
 
@@ -35,7 +41,13 @@ def process_file(input_file_path):
         if not timestamp_match:
             continue
         timestamp = float(timestamp_match.group(1))
-        dt = datetime.fromtimestamp(timestamp) - timedelta(hours=6)
+        dt = datetime.fromtimestamp(timestamp) - timedelta(hours=3)
+        
+        # Check if the timestamp is within the specified range
+        if start_time and end_time:
+            if not (dt.time() >= datetime.strptime(start_time, "%H:%M").time() and
+                    dt.time() <= datetime.strptime(end_time, "%H:%M").time()):
+                continue
 
         for key, pattern in patterns.items():
             match = pattern.search(line)
@@ -76,9 +88,6 @@ def process_file(input_file_path):
         return segments, gaps
 
     segments = {key: split_data(*data[key]) for key in data}
-
-    show_graphs = {'speed': True, 'rpm': True, 'collision': True}
-    interval = 5
 
     fig, axes = plt.subplots(
         sum(show_graphs.values()), 1, figsize=(10, 15)
