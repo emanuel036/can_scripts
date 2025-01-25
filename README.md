@@ -14,6 +14,8 @@ This script processes CAN data files and generates charts for truck speed, engin
 | 84    | Wheel-Based Vehicle Speed      |
 | 190   | Engine Speed                   |
 | 5676  | Advanced Emergency Braking System Status |
+| 597   | Brake Switch |
+| 1810  | Longitudinal Acceleration |
 
 ### Usage
 
