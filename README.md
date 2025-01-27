@@ -16,6 +16,7 @@ This script processes CAN data files and generates charts for truck speed, engin
 | 5676  | Advanced Emergency Braking System Status |
 | 597   | Brake Switch |
 | 1810  | Longitudinal Acceleration |
+| 1810  | Cruise control active |
 
 ### Usage
 

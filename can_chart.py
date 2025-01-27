@@ -14,7 +14,8 @@ can_data = {'speed': True,
             'rpm': False,
             'collision': True,
             'brake_pedal': False,
-            'long_acc': False}
+            'long_acc': False,
+            'cruise_control': False}
 
 # Input directory
 input_directory = os.path.join(os.path.dirname(__file__), 'data')
@@ -25,7 +26,8 @@ patterns = {
     'rpm': re.compile(r'F00400#.{6}(.{4})'),
     'collision': re.compile(r'F02F.{2}#.{1}(.{1})'),
     'brake_pedal': re.compile(r'FEF127#.{6}(.{1})'),
-    'long_acc': re.compile(r'F009.{2}#.{14}(.{2})')
+    'long_acc': re.compile(r'F009.{2}#.{14}(.{2})'),
+    'cruise_control': re.compile(r'FEF100#.{7}(.{1})')
 }
 timestamp_pattern = re.compile(r'\((\d+\.\d+)\)')
 
@@ -51,6 +53,8 @@ def process_hex_value(key, hex_value):
         return decimal_value * 0.1 - 12.5
     elif key == 'collision':
         return decimal_value
+    elif key == 'cruise_control':
+        return decimal_value & 0x3
     return decimal_value
 
 # Process a single line of input data
@@ -93,7 +97,8 @@ def get_graph_title(key):
         'rpm': 'Engine speed',
         'collision': 'CM system status',
         'brake_pedal': 'Brake pedal',
-        'long_acc': 'Longitudinal acceleration'
+        'long_acc': 'Longitudinal acceleration',
+        'cruise_control': 'Cruise control state'
     }
     return titles.get(key, '')
 
@@ -110,6 +115,11 @@ def set_y_ticks(ax, key):
         y_labels = ['Not pressed', 'Pressed', 'Error']
         ax.set_yticks(y_ticks)
         ax.set_yticklabels(y_labels)
+    elif key == 'cruise_control':
+        y_ticks = [0, 1, 2]
+        y_labels = ['Off', 'On', 'Error']
+        ax.set_yticks(y_ticks)
+        ax.set_yticklabels(y_labels)
 
 # Plot the chart with the given segments
 def plot_chart(segments):
@@ -119,7 +129,8 @@ def plot_chart(segments):
         'rpm': 'RPM',
         'collision': 'Status',
         'brake_pedal': 'Status',
-        'long_acc': 'M/s²'
+        'long_acc': 'M/s²',
+        'cruise_control': 'Status'
     }
 
     ax_idx = 0
