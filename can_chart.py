@@ -57,6 +57,10 @@ def process_hex_value(key, hex_value):
         return decimal_value & 0x3
     return decimal_value
 
+# Convert start_time and end_time to datetime objects once
+start_time_dt = datetime.strptime(start_time, "%H:%M").time() if start_time else None
+end_time_dt = datetime.strptime(end_time, "%H:%M").time() if end_time else None
+
 # Process a single line of input data
 def process_line(line, data):
     timestamp_match = timestamp_pattern.search(line)
@@ -65,8 +69,8 @@ def process_line(line, data):
 
     dt = datetime.fromtimestamp(
         float(timestamp_match.group(1))) - timedelta(hours=3)
-    if (start_time and dt.time() < datetime.strptime(start_time, "%H:%M").time()) or \
-       (end_time and dt.time() > datetime.strptime(end_time, "%H:%M").time()):
+    if (start_time_dt and dt.time() < start_time_dt) or \
+       (end_time_dt and dt.time() > end_time_dt):
         return
 
     for key, pattern in patterns.items():
