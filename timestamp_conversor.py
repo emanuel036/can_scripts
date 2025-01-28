@@ -22,8 +22,9 @@ def convert_timestamp(log_file):
         timestamp_str = line.split(' ')[0].strip('()')
         timestamp = float(timestamp_str)
         
-        # Convert to human-readable format in GMT
-        human_readable_time = datetime.datetime.fromtimestamp(timestamp, tz=datetime.timezone.utc)
+        # Convert to human-readable format in CST
+        cst = datetime.timezone(datetime.timedelta(hours=-6))
+        human_readable_time = datetime.datetime.fromtimestamp(timestamp, tz=cst)
         
         # Replace the timestamp in the original line
         new_line = line.replace(f'({timestamp_str})', f'({human_readable_time})')
